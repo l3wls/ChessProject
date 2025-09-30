@@ -162,4 +162,33 @@ public class Board {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
+    public void display() {
+        System.out.println("  A  B  C  D  E  F  G  H");
+
+        for (int row = 0; row < 8; row++) {
+            System.out.print((8 - row) + " ");
+
+            for (int col = 0; col < 8; col++) {
+                Piece piece = squares[row][col];
+
+                if (piece == null) {
+                    System.out.print("## ");
+                } else {
+                    System.out.print(piece.getSymbol() + " ");
+                }
+            }
+
+            System.out.println((8 - row));
+        }
+
+        System.out.println("  A  B  C  D  E  F  G  H");
+    }
+
+    public Piece[][] getSquares() {
+        return squares;
+    }
+
+    public List<Piece> getCapturedPieces() {
+        return capturedPieces;
+    }
 }
