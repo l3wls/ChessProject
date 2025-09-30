@@ -1,18 +1,21 @@
 package board;
+
+import pieces.*;
 import java.util.ArrayList;
 import java.util.List;
+import utils.Position;
 
 public class Board {
     private Piece[][] squares;
-    private List<Piece> capturedPiece;
+    private List<Piece> capturedPieces;
 
     public Board(){
         squares = new Piece[8][8];
-        capturedPiece = new ArrayList<>();
+        capturedPieces = new ArrayList<>();
         initializeBoard();
     }
 
-    public void initialBoard(){
+    private void initializeBoard(){
         for(int col = 0; col < 8; col++){
             squares[1][col] = new Pawn("black", new Position(1, col));
             squares[6][col] = new Pawn("white", new Position(6, col));
@@ -27,14 +30,14 @@ public class Board {
         squares[0][6] = new Knight("black", new Position(0,6));
         squares[0][7] = new Rook("black", new Position(0,7));
 
-        squares[0][0] = new Rook("white", new Position(7, 0));
-        squares[0][1] = new Knight("white", new Position(7, 1));
-        squares[0][2] = new Bishop("white", new Position(7, 2));
-        squares[0][3] = new Queen("white", new Position(7, 3));
-        squares[0][4] = new King("white", new Position(7, 4));
-        squares[0][5] = new Bishop("white", new Position(7, 5));
-        squares[0][6] = new Knight("white", new Position(7, 6));
-        squares[0][7] = new Rook("white", new Position(7, 7));
+        squares[7][0] = new Rook("white", new Position(7, 0));
+        squares[7][1] = new Knight("white", new Position(7, 1));
+        squares[7][2] = new Bishop("white", new Position(7, 2));
+        squares[7][3] = new Queen("white", new Position(7, 3));
+        squares[7][4] = new King("white", new Position(7, 4));
+        squares[7][5] = new Bishop("white", new Position(7, 5));
+        squares[7][6] = new Knight("white", new Position(7, 6));
+        squares[7][7] = new Rook("white", new Position(7, 7));
     }
 
     public Piece getPiece(Position position){
@@ -55,7 +58,7 @@ public class Board {
         }
         Piece targetPiece = getPiece(to);
         if (targetPiece != null) {
-            capturedPiece.add(targetPiece);
+            capturedPieces.add(targetPiece);
             System.out.println(piece.getColor() + " " + getPieceType(piece) + " captures " + targetPiece.getColor() + " " + getPieceType(targetPiece) + "!");
         }
 
