@@ -101,4 +101,65 @@ public class Board {
         }
         return null;
     }
+    
+    public boolean isCheckmate(String color) {
+        if (!isCheck(color)) {
+            return false;
+        }
+
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = squares[row][col];
+                if (piece != null && piece.getColor().equals(color)) {
+                    for (Position move : piece.possibleMoves(squares)) {
+                        // Try the move
+                        Piece originalPiece = squares[move.getRow()][move.getCol()];
+                        Position originalPosition = piece.getPosition();
+
+                        // Make temporary move
+                        squares[move.getRow()][move.getCol()] = piece;
+                        squares[originalPosition.getRow()][originalPosition.getCol()] = null;
+                        piece.setPosition(move);
+
+                        boolean stillInCheck = isCheck(color);
+
+                        // Undo the move
+                        squares[move.getRow()][move.getCol()] = originalPiece;
+                        squares[originalPosition.getRow()][originalPosition.getCol()] = piece;
+                        piece.setPosition(originalPosition);
+
+                        if (!stillInCheck) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean isStalemate(String color) {
+        if (isCheck(color)) {
+            return false;
+        }
+        // Check if any legal move is available
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = squares[row][col];
+                if (piece != null && piece.getColor().equals(color)) {
+                    if (!piece.possibleMoves(squares).isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isValidPosition(Position position) {
+        int row = position.getRow();
+        int col = position.getCol();
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
 }
