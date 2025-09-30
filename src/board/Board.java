@@ -59,11 +59,46 @@ public class Board {
             System.out.println(piece.getColor() + " " + getPieceType(piece) + " captures " + targetPiece.getColor() + " " + getPieceType(targetPiece) + "!");
         }
 
-        // Move the piece
         squares[to.getRow()][to.getCol()] = piece;
         squares[from.getRow()][from.getCol()] = null;
         piece.move(to);
 
         return true;
+    }
+
+    private String getPieceType(Piece piece) {
+        return piece.getClass().getSimpleName();
+    }
+
+    public boolean isCheck(String color) {
+        // Find the king
+        Position kingPosition = findKing(color);
+        if (kingPosition == null) {
+            return false;
+        }
+  
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = squares[row][col];
+                if (piece != null && !piece.getColor().equals(color)) {
+                    if (piece.isValidMove(squares, kingPosition)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private Position findKing(String color) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = squares[row][col];
+                if (piece instanceof King && piece.getColor().equals(color)) {
+                    return piece.getPosition();
+                }
+            }
+        }
+        return null;
     }
 }
