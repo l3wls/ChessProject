@@ -36,4 +36,34 @@ public class Board {
         squares[0][6] = new Knight("white", new Position(7, 6));
         squares[0][7] = new Rook("white", new Position(7, 7));
     }
+
+    public Piece getPiece(Position position){
+        if(!isValidPosition(position)){
+            return null;
+        }
+        return squares[position.getRow()][position.getCol()];
+    }
+
+    public boolean movePiece(Position from, Position to){
+        Piece piece = getPiece(from);
+
+        if (piece == null) {
+            return false;
+        }
+        if (!piece.isValidMove(squares, to)) {
+            return false;
+        }
+        Piece targetPiece = getPiece(to);
+        if (targetPiece != null) {
+            capturedPiece.add(targetPiece);
+            System.out.println(piece.getColor() + " " + getPieceType(piece) + " captures " + targetPiece.getColor() + " " + getPieceType(targetPiece) + "!");
+        }
+
+        // Move the piece
+        squares[to.getRow()][to.getCol()] = piece;
+        squares[from.getRow()][from.getCol()] = null;
+        piece.move(to);
+
+        return true;
+    }
 }
