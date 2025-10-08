@@ -20,5 +20,46 @@ public class Game {
         System.out.println("Enter moves in the format: [FROM] [TO] (e.g., E2 E4)");
         System.out.println();
 
+        play();
+    }
+
+    public void end(String message) {
+        System.out.println(message);
+        System.out.println("Game over!");
+        System.exit(0);
+    }
+
+    public void play() {
+        while (true) {
+            board.display();
+
+            // Check for checkmate or stalemate
+            if (board.isCheckmate(currentTurn)) {
+                String winner = currentTurn.equals("white") ? "black" : "white";
+                end("Checkmate! " + winner + " wins!");
+            } else if (board.isStalemate(currentTurn)) {
+                end("Stalemate! The game is a draw.");
+            }
+
+            // Check for check
+            if (board.isCheck(currentTurn)) {
+                System.out.println(currentTurn + " is in check!");
+            }
+
+            // Get move from current player
+            boolean moveSuccessful = false;
+            if (currentTurn.equals("white")) {
+                moveSuccessful = whitePlayer.makeMove(board);
+            } else {
+                moveSuccessful = blackPlayer.makeMove(board);
+            }
+
+            // Switch turns if move was successful
+            if (moveSuccessful) {
+                currentTurn = currentTurn.equals("white") ? "black" : "white";
+            }
+
+            System.out.println();
+        }
     }
 }
