@@ -39,4 +39,23 @@ public class Position {
     public void setCol(int col) {
         this.col = col;
     }
+
+    public String toChessNotation() {
+        return String.valueOf((char) ('A' + col)) + (8 - row);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Position position = (Position) obj;
+        return row == position.row && col == position.col;
+    }
+
+    @Override
+    public String toString() {
+        return toChessNotation();
+    }
 }
