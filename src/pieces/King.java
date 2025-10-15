@@ -5,31 +5,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a King chess piece that moves one square in any direction.
- * The King is the most important piece - if captured, the game ends.
- * Can perform castling under certain conditions.
- */
+* Represents a King chess piece that moves one square in any direction.
+* The King is the most important piece - if captured, the game ends.
+* Can perform castling under certain conditions.
+*/
 public class King extends Piece {
 
     /**
-     * Constructs a King with specified color and position.
-     *
-     * @param color    the color of the king ("white" or "black")
-     * @param position the initial position of the king
-     */
+    * Constructs a King with specified color and position.
+    *
+    * @param color    the color of the king ("white" or "black")
+    * @param position the initial position of the king
+    */
     public King(String color, Position position) {
         super(color, position);
         this.symbol = (color.equals("white") ? "w" : "b") + "K";
     }
 
     /**
-     * Calculates all possible moves for the king (one square in any direction).
-     * The king moves to adjacent squares that are empty or contain opponent pieces.
-     * Includes castling moves if eligible.
-     *
-     * @param squares the current chess board state
-     * @return list of possible move positions
-     */
+    * Calculates all possible moves for the king (one square in any direction).
+    * The king moves to adjacent squares that are empty or contain opponent pieces.
+    * Includes castling moves if eligible.
+    *
+    * @param squares the current chess board state
+    * @return list of possible move positions
+    */
     @Override
     public List<Position> possibleMoves(Piece[][] squares) {
         List<Position> moves = new ArrayList<>();

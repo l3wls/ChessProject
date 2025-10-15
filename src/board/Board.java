@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the chessboard and manages piece placement, movement, and game
- * state.
- * Handles move validation, capture logic, check/checkmate detection, castling,
- * and pawn promotion.
- */
+* Represents the chessboard and manages piece placement, movement, and game
+* state.
+* Handles move validation, capture logic, check/checkmate detection, castling,
+* and pawn promotion.
+*/
 public class Board {
     private Piece[][] squares;
     private List<Piece> capturedPieces;
@@ -22,8 +22,8 @@ public class Board {
     private boolean blackRookQueenSideMoved = false;
 
     /**
-     * Constructs a new chessboard with pieces in their standard starting positions.
-     */
+    * Constructs a new chessboard with pieces in their standard starting positions.
+    */
     public Board() {
         squares = new Piece[8][8];
         capturedPieces = new ArrayList<>();
@@ -31,9 +31,9 @@ public class Board {
     }
 
     /**
-     * Initializes the board with all chess pieces in their starting positions.
-     * Sets up pawns on ranks 2 and 7, and other pieces on ranks 1 and 8.
-     */
+    * Initializes the board with all chess pieces in their starting positions.
+    * Sets up pawns on ranks 2 and 7, and other pieces on ranks 1 and 8.
+    */
     private void initializeBoard() {
         // Initialize pawns for both colors
         for (int col = 0; col < 8; col++) {
@@ -63,11 +63,11 @@ public class Board {
     }
 
     /**
-     * Gets the piece at the specified position on the board.
-     *
-     * @param position the position to check
-     * @return the piece at the position, or null if the square is empty
-     */
+    * Gets the piece at the specified position on the board.
+    *
+    * @param position the position to check
+    * @return the piece at the position, or null if the square is empty
+    */
     public Piece getPiece(Position position) {
         if (!isValidPosition(position)) {
             return null;
@@ -76,14 +76,14 @@ public class Board {
     }
 
     /**
-     * Attempts to move a piece from one position to another.
-     * Validates the move and handles captures, castling, and pawn promotion.
-     * Prevents moves that would leave the king in check.
-     *
-     * @param from the starting position of the piece to move
-     * @param to the target position to move to
-     * @return true if the move was successful, false if invalid
-     */
+    * Attempts to move a piece from one position to another.
+    * Validates the move and handles captures, castling, and pawn promotion.
+    * Prevents moves that would leave the king in check.
+    *
+    * @param from the starting position of the piece to move
+    * @param to the target position to move to
+    * @return true if the move was successful, false if invalid
+    */
     public boolean movePiece(Position from, Position to) {
         Piece piece = getPiece(from);
 
@@ -135,13 +135,13 @@ public class Board {
     }
 
     /**
-     * Handles castling moves for both kingside and queenside.
-     *
-     * @param king the king piece being moved
-     * @param from the king's starting position
-     * @param to the king's target position
-     * @return true if castling was successful, false otherwise
-     */
+    * Handles castling moves for both kingside and queenside.
+    *
+    * @param king the king piece being moved
+    * @param from the king's starting position
+    * @param to the king's target position
+    * @return true if castling was successful, false otherwise
+    */
     private boolean handleCastling(King king, Position from, Position to) {
         String color = king.getColor();
         int row = from.getRow();
@@ -222,11 +222,11 @@ public class Board {
     }
 
     /**
-     * Tracks movement of kings and rooks for castling eligibility.
-     *
-     * @param piece the piece that moved
-     * @param from  the original position
-     */
+    * Tracks movement of kings and rooks for castling eligibility.
+    *
+    * @param piece the piece that moved
+    * @param from  the original position
+    */
     private void trackPieceMovement(Piece piece, Position from) {
         String color = piece.getColor();
 
@@ -252,25 +252,25 @@ public class Board {
     }
 
     /**
-     * Promotes a pawn to a queen when it reaches the opposite end of the board.
-     *
-     * @param position the position where promotion occurs
-     * @param color    the color of the pawn being promoted
-     */
+    * Promotes a pawn to a queen when it reaches the opposite end of the board.
+    *
+    * @param position the position where promotion occurs
+    * @param color    the color of the pawn being promoted
+    */
     private void promotePawn(Position position, String color) {
         squares[position.getRow()][position.getCol()] = new Queen(color, position);
         System.out.println(color + " pawn promoted to Queen!");
     }
 
     /**
-     * Checks if moving a piece to a new position would leave the player's king in
-     * check.
-     * Uses temporary move simulation to test the game state.
-     *
-     * @param piece the piece being moved
-     * @param to    the target position
-     * @return true if the move would leave the king in check, false otherwise
-     */
+    * Checks if moving a piece to a new position would leave the player's king in
+    * check.
+    * Uses temporary move simulation to test the game state.
+    *
+    * @param piece the piece being moved
+    * @param to    the target position
+    * @return true if the move would leave the king in check, false otherwise
+    */
     private boolean wouldLeaveKingInCheck(Piece piece, Position to) {
         // Store original state
         Position originalPos = piece.getPosition();
@@ -293,21 +293,21 @@ public class Board {
     }
 
     /**
-     * Helper method to get the simple class name of a piece for display purposes.
-     *
-     * @param piece the piece to get the type of
-     * @return the simple class name of the piece
-     */
+    * Helper method to get the simple class name of a piece for display purposes.
+    *
+    * @param piece the piece to get the type of
+    * @return the simple class name of the piece
+    */
     private String getPieceType(Piece piece) {
         return piece.getClass().getSimpleName();
     }
 
     /**
-     * Checks if the specified color's king is currently in check.
-     *
-     * @param color the color to check ("white" or "black")
-     * @return true if the king is in check, false otherwise
-     */
+    * Checks if the specified color's king is currently in check.
+    *
+    * @param color the color to check ("white" or "black")
+    * @return true if the king is in check, false otherwise
+    */
     public boolean isCheck(String color) {
         // Find the king
         Position kingPosition = findKing(color);
@@ -330,11 +330,11 @@ public class Board {
     }
 
     /**
-     * Finds the position of the king of the specified color.
-     *
-     * @param color the color of the king to find ("white" or "black")
-     * @return the position of the king, or null if not found
-     */
+    * Finds the position of the king of the specified color.
+    *
+    * @param color the color of the king to find ("white" or "black")
+    * @return the position of the king, or null if not found
+    */
     private Position findKing(String color) {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -348,12 +348,12 @@ public class Board {
     }
 
     /**
-     * Checks if the specified color is in checkmate (no legal moves to escape
-     * check).
-     *
-     * @param color the color to check ("white" or "black")
-     * @return true if the color is in checkmate, false otherwise
-     */
+    * Checks if the specified color is in checkmate (no legal moves to escape
+    * check).
+    *
+    * @param color the color to check ("white" or "black")
+    * @return true if the color is in checkmate, false otherwise
+    */
     public boolean isCheckmate(String color) {
         if (!isCheck(color)) {
             return false;
@@ -392,12 +392,12 @@ public class Board {
     }
 
     /**
-     * Checks if the specified color is in stalemate (no legal moves but not in
-     * check).
-     *
-     * @param color the color to check ("white" or "black")
-     * @return true if the color is in stalemate, false otherwise
-     */
+    * Checks if the specified color is in stalemate (no legal moves but not in
+    * check).
+    *
+    * @param color the color to check ("white" or "black")
+    * @return true if the color is in stalemate, false otherwise
+    */
     public boolean isStalemate(String color) {
         if (isCheck(color)) {
             return false;
@@ -417,10 +417,10 @@ public class Board {
     }
 
     /**
-     * Checks if a king was captured in any previous move.
-     *
-     * @return true if a king is in the captured pieces list, false otherwise
-     */
+    * Checks if a king was captured in any previous move.
+    *
+    * @return true if a king is in the captured pieces list, false otherwise
+    */
     public boolean isKingCaptured() {
         for (Piece piece : capturedPieces) {
             if (piece instanceof King) {
@@ -431,10 +431,10 @@ public class Board {
     }
 
     /**
-     * Determines the winner based on which king was captured.
-     *
-     * @return the color of the winning player, or null if no king was captured
-     */
+    * Determines the winner based on which king was captured.
+    *
+    * @return the color of the winning player, or null if no king was captured
+    */
     public String getWinner() {
         for (Piece piece : capturedPieces) {
             if (piece instanceof King) {
@@ -446,11 +446,11 @@ public class Board {
     }
 
     /**
-     * Validates if a position is within the chessboard boundaries.
-     *
-     * @param position the position to validate
-     * @return true if the position is valid, false otherwise
-     */
+    * Validates if a position is within the chessboard boundaries.
+    *
+    * @param position the position to validate
+    * @return true if the position is valid, false otherwise
+    */
     private boolean isValidPosition(Position position) {
         int row = position.getRow();
         int col = position.getCol();
@@ -458,10 +458,10 @@ public class Board {
     }
 
     /**
-     * Displays the current state of the chessboard in the console.
-     * Shows piece positions using algebraic notation with file (A-H) and rank (1-8)
-     * labels.
-     */
+    * Displays the current state of the chessboard in the console.
+    * Shows piece positions using algebraic notation with file (A-H) and rank (1-8)
+    * labels.
+    */
     public void display() {
         System.out.println("  A  B  C  D  E  F  G  H");
 
@@ -485,19 +485,19 @@ public class Board {
     }
 
     /**
-     * Gets the 2D array representing the board squares.
-     *
-     * @return the 8x8 array of pieces
-     */
+    * Gets the 2D array representing the board squares.
+    *
+    * @return the 8x8 array of pieces
+    */
     public Piece[][] getSquares() {
         return squares;
     }
 
     /**
-     * Gets the list of pieces that have been captured during the game.
-     *
-     * @return the list of captured pieces
-     */
+    * Gets the list of pieces that have been captured during the game.
+    *
+    * @return the list of captured pieces
+    */
     public List<Piece> getCapturedPieces() {
         return capturedPieces;
     }

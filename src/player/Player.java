@@ -5,17 +5,17 @@ import utils.Position;
 import java.util.Scanner;
 
 /**
- * Represents a chess player with a specific color.
- * Handles player input for moves, including castling and basic move notation.
- */
+* Represents a chess player with a specific color.
+* Handles player input for moves, including castling and basic move notation.
+*/
 public class Player {
     private String color;
 
     /**
-     * Constructs a Player object with the specified color.
-     *
-     * @param color the color of the player ("white" or "black")
-     */
+    * Constructs a Player object with the specified color.
+    *
+    * @param color the color of the player ("white" or "black")
+    */
     public Player(String color) {
         this.color = color;
     }
@@ -25,13 +25,13 @@ public class Player {
     }
 
     /**
-     * Allows the player to input a move and attempts to execute it on the board.
-     * Supports standard move notation, castling (O-O and O-O-O), and basic pawn
-     * promotion.
-     *
-     * @param board the game board
-     * @return true if the move was successful, false otherwise
-     */
+    * Allows the player to input a move and attempts to execute it on the board.
+    * Supports standard move notation, castling (O-O and O-O-O), and basic pawn
+    * promotion.
+    *
+    * @param board the game board
+    * @return true if the move was successful, false otherwise
+    */
     public boolean makeMove(Board board) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(color + " player's turn. Enter your move (e.g., E2 E4, O-O, O-O-O): ");
@@ -83,14 +83,14 @@ public class Player {
     }
 
     /**
-     * Handles castling moves by determining the appropriate king and rook
-     * positions.
-     *
-     * @param board      the game board
-     * @param isKingside true for kingside castling (O-O), false for queenside
-     *                   (O-O-O)
-     * @return true if castling was successful, false otherwise
-     */
+    * Handles castling moves by determining the appropriate king and rook
+    * positions.
+    *
+    * @param board      the game board
+    * @param isKingside true for kingside castling (O-O), false for queenside
+    *                   (O-O-O)
+    * @return true if castling was successful, false otherwise
+    */
     private boolean handleCastling(Board board, boolean isKingside) {
         int row = color.equals("white") ? 7 : 0;
         Position kingFrom = new Position(row, 4);

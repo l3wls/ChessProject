@@ -5,19 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a Pawn chess piece with unique movement rules.
- * Pawns move forward but capture diagonally, and can move two squares on first
- * move.
- * Promotes to Queen when reaching the opposite end of the board.
- */
+* Represents a Pawn chess piece with unique movement rules.
+* Pawns move forward but capture diagonally, and can move two squares on first
+* move.
+* Promotes to Queen when reaching the opposite end of the board.
+*/
 public class Pawn extends Piece {
 
     /**
-     * Constructs a Pawn with specified color and position.
-     *
-     * @param color    the color of the pawn ("white" or "black")
-     * @param position the initial position of the pawn
-     */
+    * Constructs a Pawn with specified color and position.
+    *
+    * @param color    the color of the pawn ("white" or "black")
+    * @param position the initial position of the pawn
+    */
     public Pawn(String color, Position position) {
         super(color, position);
         this.symbol = (color.equals("white") ? "w" : "b") + "P";
@@ -70,23 +70,23 @@ public class Pawn extends Piece {
     }
 
     /**
-     * Checks if the pawn has reached the promotion rank.
-     *
-     * @param to the target position
-     * @return true if the pawn should be promoted
-     */
+    * Checks if the pawn has reached the promotion rank.
+    *
+    * @param to the target position
+    * @return true if the pawn should be promoted
+    */
     public boolean isPromotionSquare(Position to) {
         int lastRank = color.equals("white") ? 0 : 7; // White promotes on rank 1, Black on rank 8
         return to.getRow() == lastRank;
     }
 
     /**
-     * Checks if a position is within the board boundaries.
-     *
-     * @param row the row to check
-     * @param col the column to check
-     * @return true if the position is valid
-     */
+    * Checks if a position is within the board boundaries.
+    *
+    * @param row the row to check
+    * @param col the column to check
+    * @return true if the position is valid
+    */
     private boolean inBoard(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
