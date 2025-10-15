@@ -13,30 +13,6 @@ A complete console-based chess game implemented in Java, featuring two-player ga
 - **Capture Tracking**: Displays captured pieces and announces captures
 - **Algebraic Notation**: Uses standard chess notation for moves (e.g., E2 E4)
 
-## Project Structure
-chessProject/
-├── .gitignore
-├── README.md
-├── bin/ # Compiled classes (generated, not committed)
-└── src/ # Source code
-├── board/
-│ └── Board.java # Board management and game logic
-├── pieces/ # Chess piece implementations
-│ ├── Piece.java # Abstract base class
-│ ├── Pawn.java
-│ ├── Rook.java
-│ ├── Knight.java
-│ ├── Bishop.java
-│ ├── Queen.java
-│ └── King.java
-├── utils/
-│ └── Position.java # Coordinate handling
-├── game/
-│ └── Game.java # Game flow controller
-├── player/
-│ └── Player.java # Player move handling
-└── Main.java # Program entry point
-
 text
 
 ## How to Run the Game
@@ -54,23 +30,23 @@ text
 Compile the game:
 
 bash
-javac -d bin src/**/*.java src/Main.java
+javac -d bin src/**/*.java src/main.java
 Run the game:
 
 bash
-java -cp bin Main
+java -cp bin main
 Alternative Compilation (if the above doesn't work)
 Windows:
 
 bash
 javac -d bin src\*.java src\**\*.java
-java -cp bin Main
+java -cp bin main
 Linux/Mac:
 
 bash
 find src -name "*.java" > sources.txt
 javac -d bin @sources.txt
-java -cp bin Main
+java -cp bin main
 How to Play
 Starting the Game: The game begins with white pieces moving first.
 
