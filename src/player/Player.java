@@ -4,9 +4,17 @@ import board.Board;
 import utils.Position;
 import java.util.Scanner;
 
+/**
+* Represents a chess player with a specific color.
+*/
 public class Player {
     private String color;
 
+    /**
+    * Constructs a Player object with the specified color.
+    *
+    * @param color the color of the player ("white" or "black")
+    */
     public Player(String color) {
         this.color = color;
     }
@@ -14,7 +22,13 @@ public class Player {
     public String getColor() {
         return color;
     }
-
+    
+    /**
+    * Allows the player to input a move and attempts to execute it on the board.
+    *
+    * @param board the game board
+    * @return true if the move was successful, false otherwise
+    */
     public boolean makeMove(Board board) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(color + " player's turn. Enter your move (e.g., E2 E4): ");

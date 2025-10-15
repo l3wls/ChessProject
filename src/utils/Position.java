@@ -1,13 +1,28 @@
 package utils;
+
+/**
+ * Represents a position on the chessboard with row and column coordinates.
+ */
 public class Position {
     private int row;
     private int col;
 
+    /**
+     * Constructs a Position object with specified row and column.
+     *
+     * @param row the row coordinate (0-7)
+     * @param col the column coordinate (0-7)
+     */
     public Position(int row, int col) {
         this.row = row;
         this.col = col;
     }
 
+    /**
+     * Constructs a Position object from chess notation (e.g., "E2").
+     *
+     * @param chessNotation the position in chess notation
+     */
     public Position(String chessNotation) {
         if (chessNotation.length() != 2) {
             throw new IllegalArgumentException("Invalid chess notation: " + chessNotation);
@@ -40,6 +55,11 @@ public class Position {
         this.col = col;
     }
 
+    /**
+     * Converts the position to chess notation (e.g., "E2").
+     *
+     * @return the position in chess notation
+     */
     public String toChessNotation() {
         return String.valueOf((char) ('A' + col)) + (8 - row);
     }

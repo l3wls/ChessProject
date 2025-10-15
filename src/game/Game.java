@@ -2,19 +2,32 @@ package game;
 
 import board.Board;
 import player.Player;
+
+/**
+* Main game controller that manages the chess game flow, turns, and game
+* states.
+* Handles the game loop, move validation, and end-game conditions.
+*/
 public class Game {
     private Board board;
     private Player whitePlayer;
     private Player blackPlayer;
     private String currentTurn;
-
+    
+    /**
+    * Constructs a new Game with players, board, and initializes white to move
+    * first.
+    */
     public Game() {
         board = new Board();
         whitePlayer = new Player("white");
         blackPlayer = new Player("black");
         currentTurn = "white";
     }
-
+    
+    /**
+    * Starts a new chess game and displays welcome message and instructions.
+    */
     public void start() {
         System.out.println("Welcome to Chess!");
         System.out.println("Enter moves in the format: [FROM] [TO] (e.g., E2 E4)");
@@ -22,13 +35,22 @@ public class Game {
 
         play();
     }
-
+    
+    /**
+    * Ends the game and displays the final message before terminating the program.
+    *
+    * @param message the end game message to display
+    */
     public void end(String message) {
         System.out.println(message);
         System.out.println("Game over!");
         System.exit(0);
     }
-
+    
+    /**
+    * Main game loop that alternates between players, checks game states,
+    * and processes moves until the game ends.
+    */
     public void play() {
         while (true) {
             board.display();
