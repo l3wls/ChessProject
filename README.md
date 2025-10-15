@@ -12,6 +12,8 @@ A complete console-based chess game implemented in Java, featuring two-player ga
 - **Move Validation**: Prevents illegal moves and moves that put your own king in check
 - **Capture Tracking**: Displays captured pieces and announces captures
 - **Algebraic Notation**: Uses standard chess notation for moves (e.g., E2 E4)
+- **King Side Castle**: (O-O) & Queen Side Castle (O-O-O)
+- **Pawn to Queen Promotion**: All Pawns that reach otherside becomes Queens
 
 ## How to Run the Game
 
@@ -77,7 +79,11 @@ wQ, bQ - White/Black Queen
 
 wK, bK - White/Black King
 
-## - Empty square
+O-O - King Side Castle
+
+O-O-O - Queen Side Castle
+
+## " " - Checkerboard Pattern
 
 Game Rules Implemented
 ✅ All basic piece movements
