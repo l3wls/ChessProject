@@ -83,7 +83,7 @@ O-O - King Side Castle
 
 O-O-O - Queen Side Castle
 
-## " " - Checkerboard Pattern
+'##' " " - Checkerboard Pattern
 
 Game Rules Implemented
 ✅ All basic piece movements
