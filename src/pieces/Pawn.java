@@ -30,10 +30,9 @@ public class Pawn extends Piece {
             }
         }
 
-        int[] dc = { -1, 1 };
-        for (int d : dc) {
-            int nr = r + dir;
-            int nc = c + d;
+        int[] dcs = { -1, 1 };
+        for (int dc : dcs) {
+            int nr = r + dir, nc = c + dc;
             if (inBoard(nr, nc)) {
                 Piece target = board[nr][nc];
                 if (target != null && !target.color.equals(this.color)) {
@@ -43,6 +42,11 @@ public class Pawn extends Piece {
         }
 
         return moves;
+    }
+
+    public boolean isPromotionSquare(Position to) {
+        int lastRank = color.equals("white") ? 0 : 7;
+        return to.getRow() == lastRank;
     }
 
     private boolean inBoard(int row, int col) {
