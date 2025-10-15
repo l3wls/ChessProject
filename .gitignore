@@ -1,1 +1,8 @@
 .DS_Store
+
+# Compiled class files
+bin/
+*.class
+
+# If any class files accidentally end up in src/
+src/**/*.class
