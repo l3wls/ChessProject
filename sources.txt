@@ -1,0 +1,12 @@
+C:\Users\junio\Downloads\ChessProject-main\src\main.java
+C:\Users\junio\Downloads\ChessProject-main\src\board\Board.java
+C:\Users\junio\Downloads\ChessProject-main\src\game\Game.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Bishop.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\King.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Knight.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Pawn.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Piece.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Queen.java
+C:\Users\junio\Downloads\ChessProject-main\src\pieces\Rook.java
+C:\Users\junio\Downloads\ChessProject-main\src\player\Player.java
+C:\Users\junio\Downloads\ChessProject-main\src\utils\Position.java
