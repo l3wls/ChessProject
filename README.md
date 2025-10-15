@@ -25,26 +25,23 @@ A complete console-based chess game implemented in Java, featuring two-player ga
    ```bash
    git clone https://github.com/yourusername/chessProject.git
    cd chessProject
-Compile the game:
+   
+2. Compile the game:
+   ```bash
+   javac -d bin src/**/*.java src/main.java
+   
+3. Run the game:
 
-bash
-javac -d bin src/**/*.java src/main.java
-Run the game:
-
-bash
-java -cp bin main
+   ```bash
+   java -cp bin main
+   
 Alternative Compilation (if the above doesn't work)
 Windows:
 
-bash
-javac -d bin src\*.java src\**\*.java
-java -cp bin main
-Linux/Mac:
-
-bash
-find src -name "*.java" > sources.txt
-javac -d bin @sources.txt
-java -cp bin main
+   ```bash
+   javac -d bin src\*.java src\**\*.java
+   java -cp bin main
+   ```
 How to Play
 Starting the Game: The game begins with white pieces moving first.
 
@@ -95,4 +92,8 @@ Game Rules Implemented
 
 ✅ Turn-based gameplay
 
-✅ King capture ends game immediately
+✅ King capture ends game immediately & Check Mate
+
+✅ Pawn to Queen Promo
+
+✅ King Side & Queen Side Castling
