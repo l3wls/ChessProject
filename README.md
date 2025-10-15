@@ -13,8 +13,6 @@ A complete console-based chess game implemented in Java, featuring two-player ga
 - **Capture Tracking**: Displays captured pieces and announces captures
 - **Algebraic Notation**: Uses standard chess notation for moves (e.g., E2 E4)
 
-text
-
 ## How to Run the Game
 
 ### Prerequisites
