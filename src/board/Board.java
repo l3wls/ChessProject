@@ -49,29 +49,80 @@ public class Board {
 
     public boolean movePiece(Position from, Position to) {
         Piece piece = getPiece(from);
+
         if (piece == null) {
             return false;
         }
         if (!piece.isValidMove(squares, to)) {
             return false;
         }
+
+        // PREVENT MOVES THAT PUT OWN KING IN CHECK
+        if (wouldLeaveKingInCheck(piece, to)) {
+            System.out.println("Invalid move: Would put your king in check!");
+            return false;
+        }
+
         Piece targetPiece = getPiece(to);
         if (targetPiece != null) {
             capturedPieces.add(targetPiece);
             System.out.println(piece.getColor() + " " + getPieceType(piece) + " captures " + targetPiece.getColor()
                     + " " + getPieceType(targetPiece) + "!");
+
+            // END GAME IF KING IS CAPTURED - return special value or throw exception
+            if (targetPiece instanceof King) {
+                return true; // Move successful and king was captured
+            }
         }
+
         squares[to.getRow()][to.getCol()] = piece;
         squares[from.getRow()][from.getCol()] = null;
         piece.move(to);
-        if (piece instanceof Pawn) {
-            String color = piece.getColor();
-            if ((color.equals("white") && to.getRow() == 0) || (color.equals("black") && to.getRow() == 7)) {
-                squares[to.getRow()][to.getCol()] = new Queen(color, to);
-            }
-        }
+
         return true;
     }
+
+    private boolean wouldLeaveKingInCheck(Piece piece, Position to) {
+        // Store original state
+        Position originalPos = piece.getPosition();
+        Piece targetPiece = squares[to.getRow()][to.getCol()];
+
+        // Make temporary move
+        squares[to.getRow()][to.getCol()] = piece;
+        squares[originalPos.getRow()][originalPos.getCol()] = null;
+        piece.setPosition(to);
+
+        // Check if king is in check
+        boolean inCheck = isCheck(piece.getColor());
+
+        // Undo move
+        squares[to.getRow()][to.getCol()] = targetPiece;
+        squares[originalPos.getRow()][originalPos.getCol()] = piece;
+        piece.setPosition(originalPos);
+
+        return inCheck;
+    }
+
+    public String getWinner() {
+        for (Piece piece : capturedPieces) {
+            if (piece instanceof King) {
+                // The opponent of the captured king's color wins
+                return piece.getColor().equals("white") ? "black" : "white";
+            }
+        }
+        return null;
+    }
+
+    public boolean isKingCaptured() {
+        for (Piece piece : capturedPieces) {
+            if (piece instanceof King) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     private String getPieceType(Piece piece) {
         return piece.getClass().getSimpleName();

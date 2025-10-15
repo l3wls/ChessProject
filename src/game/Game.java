@@ -54,8 +54,13 @@ public class Game {
                 moveSuccessful = blackPlayer.makeMove(board);
             }
 
-            // Switch turns if move was successful
+            // After a successful move, check if a king was captured
             if (moveSuccessful) {
+                // Check if the move resulted in a king capture
+                if (board.isKingCaptured()) {
+                    String winner = board.getWinner();
+                    end("King captured! " + winner + " wins the game!");
+                }
                 currentTurn = currentTurn.equals("white") ? "black" : "white";
             }
 
