@@ -1,5 +1,5 @@
 package gui;
 
-public class SquareButton {
+public class GameHistoryPanel {
     
 }
