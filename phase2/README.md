@@ -51,8 +51,6 @@ chessProject/phase2/
 
 ### Extra Feature 1: Menu Bar with Game Controls
 - **New Game** - Resets the board to initial state
-- **Save Game** - Placeholder for future implementation
-- **Load Game** - Placeholder for future implementation
 - **Settings** - Access to customization options
 - **Exit** - Clean application termination
 
