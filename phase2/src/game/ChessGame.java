@@ -62,6 +62,27 @@ public class ChessGame {
     }
 
     /**
+     * Undoes the last move made in the game.
+     *
+     * @return true if undo was successful, false if no moves to undo
+     */
+    public boolean undoMove() {
+        if (!gameActive) {
+            return false;
+        }
+
+        boolean undoSuccessful = board.undoMove();
+
+        if (undoSuccessful) {
+            // Switch turn back
+            currentTurn = currentTurn.equals("white") ? "black" : "white";
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Starts a new game, resetting the board and game state.
      */
     public void newGame() {

@@ -4,6 +4,7 @@ import pieces.*;
 import utils.Position;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * SIMPLIFIED Board for Phase 2 - handles visual piece placement and basic moves
@@ -12,6 +13,7 @@ import java.util.List;
 public class Board {
     private Piece[][] squares;
     private List<Piece> capturedPieces;
+    private Stack<Move> moveHistory;
 
     /**
      * Constructs a new chessboard with pieces in starting positions.
@@ -19,6 +21,7 @@ public class Board {
     public Board() {
         squares = new Piece[8][8];
         capturedPieces = new ArrayList<>();
+        moveHistory = new Stack<>();
         initializeBoard();
     }
 
@@ -68,8 +71,12 @@ public class Board {
             return false;
         }
 
-        // Handle capture if target square is occupied
         Piece targetPiece = getPiece(to);
+
+        // Store move for undo functionality
+        Move move = new Move(from, to, piece, targetPiece);
+        moveHistory.push(move);
+
         if (targetPiece != null) {
             capturedPieces.add(targetPiece);
         }
@@ -78,6 +85,32 @@ public class Board {
         squares[to.getRow()][to.getCol()] = piece;
         squares[from.getRow()][from.getCol()] = null;
         piece.setPosition(to);
+
+        return true;
+    }
+
+    /**
+     * Undoes the last move made on the board.
+     * This should physically move the piece back to its original position.
+     */
+    public boolean undoMove() {
+        if (moveHistory.isEmpty()) {
+            return false;
+        }
+
+        Move lastMove = moveHistory.pop();
+
+        // Move piece back to original position
+        squares[lastMove.from.getRow()][lastMove.from.getCol()] = lastMove.piece;
+        squares[lastMove.to.getRow()][lastMove.to.getCol()] = lastMove.capturedPiece;
+
+        // Update the piece's position
+        lastMove.piece.setPosition(lastMove.from);
+
+        // Remove from captured pieces if there was a capture
+        if (lastMove.capturedPiece != null) {
+            capturedPieces.remove(lastMove.capturedPiece);
+        }
 
         return true;
     }
@@ -152,5 +185,22 @@ public class Board {
      */
     public List<Piece> getCapturedPieces() {
         return capturedPieces;
+    }
+
+    /**
+     * Helper class to store move information for undo functionality.
+     */
+    public static class Move {
+        public Position from;
+        public Position to;
+        public Piece piece;
+        public Piece capturedPiece;
+
+        public Move(Position from, Position to, Piece piece, Piece capturedPiece) {
+            this.from = from;
+            this.to = to;
+            this.piece = piece;
+            this.capturedPiece = capturedPiece;
+        }
     }
 }

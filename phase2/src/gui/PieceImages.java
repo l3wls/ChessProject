@@ -74,13 +74,4 @@ public class PieceImages {
         String key = color.substring(0, 1) + pieceType.substring(0, 1).toUpperCase();
         return pieceUnicodeMap.getOrDefault(key, "");
     }
-
-    /**
-     * Gets all Unicode pieces for testing or display purposes.
-     *
-     * @return array of all Unicode chess piece characters
-     */
-    public static String[] getAllUnicodePieces() {
-        return UNICODE_PIECES.clone();
-    }
 }

@@ -47,9 +47,6 @@ public class SettingsDialog extends JDialog {
         setupEventHandlers();
     }
 
-    /**
-     * Initializes the dialog components and layout.
-     */
     private void initializeDialog() {
         setLayout(new BorderLayout());
         setSize(400, 250);
@@ -66,9 +63,6 @@ public class SettingsDialog extends JDialog {
         add(mainPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Creates the board settings panel.
-     */
     private JPanel createBoardSettingsPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
         panel.setBorder(BorderFactory.createTitledBorder("Board Settings"));
@@ -90,9 +84,6 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
-    /**
-     * Creates the control buttons panel.
-     */
     private JPanel createControlPanel() {
         JPanel panel = new JPanel(new FlowLayout());
 
@@ -107,9 +98,6 @@ public class SettingsDialog extends JDialog {
         return panel;
     }
 
-    /**
-     * Sets up event handlers for the dialog components.
-     */
     private void setupEventHandlers() {
         // Apply button
         applyButton.addActionListener(new ActionListener() {
@@ -144,9 +132,6 @@ public class SettingsDialog extends JDialog {
         });
     }
 
-    /**
-     * Applies the selected settings to the game.
-     */
     private void applySettings() {
         // Apply board colors
         int themeIndex = boardThemeCombo.getSelectedIndex();
@@ -164,18 +149,12 @@ public class SettingsDialog extends JDialog {
         dispose();
     }
 
-    /**
-     * Cancels the settings changes and closes the dialog.
-     */
     private void cancelSettings() {
         // Restore original colors
         chessGUI.setBoardColors(originalLightColor, originalDarkColor);
         dispose();
     }
 
-    /**
-     * Resets all settings to default values.
-     */
     private void resetSettings() {
         boardThemeCombo.setSelectedIndex(0); // Classic
         boardSizeCombo.setSelectedIndex(1); // Medium
@@ -184,9 +163,6 @@ public class SettingsDialog extends JDialog {
         previewTheme();
     }
 
-    /**
-     * Previews the selected theme by temporarily applying colors.
-     */
     private void previewTheme() {
         int themeIndex = boardThemeCombo.getSelectedIndex();
         if (themeIndex >= 0 && themeIndex < THEME_COLORS.length) {
