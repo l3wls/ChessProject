@@ -55,7 +55,7 @@ chessProject/phase2/
 - **Load Game** - Placeholder for future implementation
 - **Settings** - Access to customization options
 - **Exit** - Clean application termination
-- **Help/About** - Project information and features list
+
 
 ### Extra Feature 2: Settings Window for Customization
 - **Board Theme Selection** - Multiple color schemes:
