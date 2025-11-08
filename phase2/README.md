@@ -126,11 +126,3 @@ javac -d bin @sources.txt
 
 ## Phase 2 Focus
 This implementation focuses exclusively on visual aspects and basic functionality as required by Phase 2 specifications. **No chess movement rules or validation are enforced** - any piece can move to any square.
-
-## Future Enhancements (Phase 3)
-- Implement full chess rules and move validation
-- Add check and checkmate detection
-- Implement special moves (castling, en passant, pawn promotion)
-- Add timer functionality
-- Implement save/load game features
-- Add multiplayer support
