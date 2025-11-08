@@ -1,8 +1,8 @@
 package gui;
 
 import game.ChessGame;
+import pieces.Piece;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,13 +17,11 @@ public class GameHistoryPanel extends JPanel {
     private JButton undoButton;
     private DefaultListModel<String> capturedPiecesModel;
     private List<String> moveHistory;
-    private List<Boolean> hadCapture; // Track which moves had captures
 
     public GameHistoryPanel(ChessGame chessGame, ChessGUI chessGUI) {
         this.chessGame = chessGame;
         this.chessGUI = chessGUI;
         this.moveHistory = new ArrayList<>();
-        this.hadCapture = new ArrayList<>();
         this.capturedPiecesModel = new DefaultListModel<>();
 
         initializePanel();
@@ -92,61 +90,85 @@ public class GameHistoryPanel extends JPanel {
 
     public void addMove(String moveDescription) {
         moveHistory.add(moveDescription);
-        hadCapture.add(false); // Default to no capture
         moveHistoryArea.append(moveDescription + "\n");
         moveHistoryArea.setCaretPosition(moveHistoryArea.getDocument().getLength());
     }
 
     public void addCapturedPiece(String pieceDescription) {
         capturedPiecesModel.addElement(pieceDescription);
-        // Mark the last move as having a capture
-        if (!hadCapture.isEmpty()) {
-            hadCapture.set(hadCapture.size() - 1, true);
-        }
     }
 
     private void undoLastMove() {
-        if (moveHistory.size() > 0) {
-            String lastMove = moveHistory.remove(moveHistory.size() - 1);
-            boolean lastMoveHadCapture = hadCapture.remove(hadCapture.size() - 1);
-
-            // FIRST: Undo the move in the game engine
-            boolean undoSuccess = chessGame.undoMove();
-
-            if (undoSuccess) {
-                // SECOND: Update the board display to show the reverted state
-                chessGUI.updateBoardDisplay();
-
-                // THIRD: Update the text area
-                String historyText = moveHistoryArea.getText();
-                int lastNewline = historyText.lastIndexOf("\n");
-                if (lastNewline > 0) {
-                    moveHistoryArea.setText(historyText.substring(0, lastNewline));
-                }
-
-                // FOURTH: Remove captured piece if this move had one
-                if (lastMoveHadCapture && capturedPiecesModel.size() > 0) {
-                    capturedPiecesModel.removeElementAt(capturedPiecesModel.size() - 1);
-                }
-
-                JOptionPane.showMessageDialog(this, "Undid: " + lastMove);
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to undo move in game engine");
-            }
-        } else {
+        if (moveHistory.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No moves to undo.");
+            return;
+        }
+
+        // Store the captured pieces count BEFORE undo
+        int capturedSizeBefore = chessGame.getBoard().getCapturedPieces().size();
+
+        // Get the last move description
+        String lastMove = moveHistory.remove(moveHistory.size() - 1);
+
+        // Call the game engine to undo the move
+        boolean undoSuccess = chessGame.undoMove();
+
+        if (undoSuccess) {
+            // Get captured pieces count AFTER undo
+            int capturedSizeAfter = chessGame.getBoard().getCapturedPieces().size();
+
+            // Update the board display FIRST - this is critical!
+            chessGUI.updateBoardDisplay();
+
+            // Remove the last move from text area
+            String historyText = moveHistoryArea.getText();
+            int lastNewline = historyText.lastIndexOf("\n", historyText.length() - 2);
+            if (lastNewline > 0) {
+                moveHistoryArea.setText(historyText.substring(0, lastNewline + 1));
+            }
+
+            // If a piece was restored (captured list got smaller), remove from display
+            if (capturedSizeAfter < capturedSizeBefore && capturedPiecesModel.getSize() > 0) {
+                capturedPiecesModel.removeElementAt(capturedPiecesModel.getSize() - 1);
+            }
+
+            // Force a complete repaint
+            chessGUI.revalidate();
+            chessGUI.repaint();
+
+            JOptionPane.showMessageDialog(this,
+                    "Move undone: " + lastMove,
+                    "Undo Successful",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Re-add the move back if undo failed
+            moveHistory.add(lastMove);
+            JOptionPane.showMessageDialog(this,
+                    "Failed to undo move",
+                    "Undo Failed",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void clearHistory() {
-        int result = JOptionPane.showConfirmDialog(this, "Clear all game history?",
-                "Clear History", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this,
+                "Clear all game history?",
+                "Clear History",
+                JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
             moveHistory.clear();
-            hadCapture.clear();
             capturedPiecesModel.clear();
             moveHistoryArea.setText("Game Started\n===========\n");
+        }
+    }
+
+    // Add this method to refresh captured pieces from the actual game state
+    public void refreshCapturedPieces() {
+        capturedPiecesModel.clear();
+        for (Piece piece : chessGame.getBoard().getCapturedPieces()) {
+            String captureText = piece.getColor() + " " + piece.getClass().getSimpleName();
+            capturedPiecesModel.addElement(captureText);
         }
     }
 }

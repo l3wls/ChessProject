@@ -71,12 +71,14 @@ public class Board {
             return false;
         }
 
+        // CRITICAL: Check for captured piece BEFORE moving
         Piece targetPiece = getPiece(to);
 
         // Store move for undo functionality
         Move move = new Move(from, to, piece, targetPiece);
         moveHistory.push(move);
 
+        // Add to captured pieces if there was a piece at target
         if (targetPiece != null) {
             capturedPieces.add(targetPiece);
         }
@@ -91,7 +93,9 @@ public class Board {
 
     /**
      * Undoes the last move made on the board.
-     * This should physically move the piece back to its original position.
+     * This physically moves the piece back to its original position.
+     *
+     * @return true if undo was successful, false if no moves to undo
      */
     public boolean undoMove() {
         if (moveHistory.isEmpty()) {
@@ -107,9 +111,11 @@ public class Board {
         // Update the piece's position
         lastMove.piece.setPosition(lastMove.from);
 
-        // Remove from captured pieces if there was a capture
+        // If captured piece is restored, also update its position
         if (lastMove.capturedPiece != null) {
-            capturedPieces.remove(lastMove.capturedPiece);
+            lastMove.capturedPiece.setPosition(lastMove.to);
+            // Remove from captured pieces list
+            capturedPieces.remove(capturedPieces.size() - 1);
         }
 
         return true;

@@ -80,23 +80,32 @@ public class BoardPanel extends JPanel {
             if (piece != null) {
                 selectedSquare = clickedPosition;
                 highlightSquare(row, col, true);
+                System.out.println("Selected piece at: " + clickedPosition); // DEBUG
             }
         } else {
             // Second click - move piece
             if (!selectedSquare.equals(clickedPosition)) {
-                // Check if there's a piece to capture BEFORE moving
+                // CRITICAL: Get piece info BEFORE making the move
+                Piece movingPiece = chessGame.getBoard().getPiece(selectedSquare);
                 Piece targetPiece = chessGame.getBoard().getPiece(clickedPosition);
+
+                System.out.println("Moving from " + selectedSquare + " to " + clickedPosition); // DEBUG
+                System.out.println(
+                        "Target piece: " + (targetPiece != null ? targetPiece.getClass().getSimpleName() : "none")); // DEBUG
+
                 boolean moveSuccessful = chessGame.makeMove(selectedSquare, clickedPosition);
 
                 if (moveSuccessful) {
-                    String moveDescription = formatMove(selectedSquare, clickedPosition);
+                    // Format the move description
+                    String moveDescription = formatMove(movingPiece, selectedSquare, clickedPosition);
                     chessGUI.addMoveToHistory(moveDescription);
 
-                    // If there was a piece at the target, it was captured
+                    // If there was a capture, add to captured pieces panel
                     if (targetPiece != null) {
                         String captureText = targetPiece.getColor() + " " +
                                 targetPiece.getClass().getSimpleName();
                         chessGUI.addCapturedPiece(captureText);
+                        System.out.println("Captured: " + captureText); // DEBUG
                     }
 
                     updateBoard();
@@ -109,6 +118,7 @@ public class BoardPanel extends JPanel {
                 highlightSquare(selectedSquare.getRow(), selectedSquare.getCol(), false);
                 selectedSquare = null;
             } else {
+                // Clicked same square - deselect
                 highlightSquare(row, col, false);
                 selectedSquare = null;
             }
@@ -124,18 +134,22 @@ public class BoardPanel extends JPanel {
     public void updateBoard() {
         Board board = chessGame.getBoard();
 
+        System.out.println("=== UPDATING BOARD ==="); // DEBUG
+
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Position position = new Position(row, col);
                 Piece piece = board.getPiece(position);
                 JLabel square = squares[row][col];
 
+                // Reset to correct color
                 if ((row + col) % 2 == 0) {
                     square.setBackground(chessGUI.getLightSquareColor());
                 } else {
                     square.setBackground(chessGUI.getDarkSquareColor());
                 }
 
+                // Update piece display
                 if (piece != null) {
                     String unicode = PieceImages.getPieceUnicode(piece);
                     square.setText(unicode);
@@ -145,7 +159,9 @@ public class BoardPanel extends JPanel {
             }
         }
 
+        revalidate();
         repaint();
+        System.out.println("Board updated"); // DEBUG
     }
 
     public void updateBoardColors() {
@@ -161,8 +177,7 @@ public class BoardPanel extends JPanel {
         repaint();
     }
 
-    private String formatMove(Position from, Position to) {
-        Piece piece = chessGame.getBoard().getPiece(to);
+    private String formatMove(Piece piece, Position from, Position to) {
         String pieceName = piece != null ? piece.getClass().getSimpleName() : "Piece";
         return pieceName + " " + from.toString() + " → " + to.toString();
     }
