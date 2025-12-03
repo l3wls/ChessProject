@@ -379,19 +379,48 @@ public class Board {
      * @param color the color to check ("white" or "black")
      * @return true if the color is in checkmate, false otherwise
      */
+    /**
+     * Checks if the specified color is in checkmate (no legal moves to escape
+     * check).
+     *
+     * @param color the color to check ("white" or "black")
+     * @return true if the color is in checkmate, false otherwise
+     */
+    /**
+     * Checks if the specified color is in checkmate (no legal moves to escape
+     * check).
+     *
+     * @param color the color to check ("white" or "black")
+     * @return true if the color is in checkmate, false otherwise
+     */
     public boolean isCheckmate(String color) {
+        // First, must be in check to be in checkmate
         if (!isCheck(color)) {
             return false;
         }
 
-        // Check if any move can get out of check
+        // Check if any LEGAL move can get out of check
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Piece piece = squares[row][col];
                 if (piece != null && piece.getColor().equals(color)) {
-                    for (Position move : piece.possibleMoves(squares)) {
+                    List<Position> possibleMoves = piece.possibleMoves(squares);
+
+                    for (Position move : possibleMoves) {
+                        // IMPORTANT: For kings attempting castling, skip if in check
+                        // You cannot castle out of check
+                        if (piece instanceof King && Math.abs(piece.getPosition().getCol() - move.getCol()) == 2) {
+                            continue;
+                        }
+
+                        // Check if this move is actually legal (not blocked by friendly piece)
+                        Piece targetPiece = squares[move.getRow()][move.getCol()];
+                        if (targetPiece != null && targetPiece.getColor().equals(color)) {
+                            // Can't move to square occupied by own piece
+                            continue;
+                        }
+
                         // Try the move
-                        Piece originalPiece = squares[move.getRow()][move.getCol()];
                         Position originalPosition = piece.getPosition();
 
                         // Make temporary move
@@ -402,17 +431,19 @@ public class Board {
                         boolean stillInCheck = isCheck(color);
 
                         // Undo the move
-                        squares[move.getRow()][move.getCol()] = originalPiece;
+                        squares[move.getRow()][move.getCol()] = targetPiece;
                         squares[originalPosition.getRow()][originalPosition.getCol()] = piece;
                         piece.setPosition(originalPosition);
 
                         if (!stillInCheck) {
-                            return false;
+                            return false; // Found an escape move
                         }
                     }
                 }
             }
         }
+
+        // No escape moves found - it's checkmate
         return true;
     }
 
