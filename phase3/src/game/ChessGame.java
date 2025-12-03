@@ -133,4 +133,8 @@ public class ChessGame {
     public void endGame() {
         this.gameActive = false;
     }
+
+    public void undoMove() {
+        // TODO: implement actual undo logic later
+    }
 }

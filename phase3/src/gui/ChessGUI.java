@@ -4,7 +4,7 @@ import game.ChessGame;
 import javax.swing.*;
 import java.awt.*;
 
-public class ChessGUI {
+public class ChessGUI extends JFrame {
     private ChessGame chessGame;
     private BoardPanel boardPanel;
     private GameHistoryPanel historyPanel;
@@ -31,15 +31,14 @@ public class ChessGUI {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        boardPanel = new BoardPanel(chessGame, this);
-        historyPanel = new GameHistoryPanel(chessGame, this);
-
-        // Create turn display panel
         JPanel topPanel = new JPanel();
         turnLabel = new JLabel("Current Turn: White");
         turnLabel.setFont(new Font("Arial", Font.BOLD, 18));
         turnLabel.setForeground(Color.BLACK);
         topPanel.add(turnLabel);
+
+        boardPanel = new BoardPanel(chessGame, this);
+        historyPanel = new GameHistoryPanel(chessGame, this);
 
         add(topPanel, BorderLayout.NORTH);
         add(boardPanel, BorderLayout.CENTER);
@@ -48,6 +47,9 @@ public class ChessGUI {
         pack();
         setLocationRelativeTo(null);
         setResizable(true);
+
+        // Ensure the label reflects the actual current turn
+        updateTurnDisplay();
     }
 
     private void initializeMenu() {
@@ -85,7 +87,7 @@ public class ChessGUI {
     }
 
     private void showSettings() {
-        SettingsDialog settingsDialog = new SettingsDialog(this, this);
+        SettingsDialog settingsDialog = new SettingsDialog(this, chessGame);
         settingsDialog.setVisible(true);
     }
 
@@ -98,6 +100,11 @@ public class ChessGUI {
     }
 
     public void updateTurnDisplay() {
+        // safety in case something calls this very early
+        if (chessGame == null || turnLabel == null) {
+            return;
+        }
+
         String currentTurn = chessGame.getCurrentTurn();
         turnLabel.setText("Current Turn: " +
                 (currentTurn.equals("white") ? "White" : "Black"));
