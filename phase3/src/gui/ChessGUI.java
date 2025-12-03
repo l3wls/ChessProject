@@ -31,12 +31,14 @@ public class ChessGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Create turn display panel FIRST so it's ready before board panel uses it
         JPanel topPanel = new JPanel();
         turnLabel = new JLabel("Current Turn: White");
         turnLabel.setFont(new Font("Arial", Font.BOLD, 18));
         turnLabel.setForeground(Color.BLACK);
         topPanel.add(turnLabel);
 
+        // Now create the main panels
         boardPanel = new BoardPanel(chessGame, this);
         historyPanel = new GameHistoryPanel(chessGame, this);
 
@@ -48,7 +50,7 @@ public class ChessGUI extends JFrame {
         setLocationRelativeTo(null);
         setResizable(true);
 
-        // Ensure the label reflects the actual current turn
+        // Sync the label with the actual current turn
         updateTurnDisplay();
     }
 
@@ -100,7 +102,7 @@ public class ChessGUI extends JFrame {
     }
 
     public void updateTurnDisplay() {
-        // safety in case something calls this very early
+        // Safety check in case something calls this very early
         if (chessGame == null || turnLabel == null) {
             return;
         }

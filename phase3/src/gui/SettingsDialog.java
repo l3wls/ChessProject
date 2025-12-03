@@ -5,6 +5,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import game.ChessGame; // ✅ added so we can use ChessGame in the new constructor
 
 /**
  * Dialog window for customizing chess game appearance.
@@ -45,6 +46,19 @@ public class SettingsDialog extends JDialog {
 
         initializeDialog();
         setupEventHandlers();
+    }
+
+    /**
+     * Overloaded constructor to match call from ChessGUI: new SettingsDialog(this,
+     * chessGame)
+     * The ChessGame parameter is not needed here, so we delegate to the main
+     * constructor.
+     */
+    public SettingsDialog(ChessGUI parent, ChessGame game) {
+        this(parent, parent);
+        // If in the future you want to use 'game' here, you can store it in a field.
+        // For now it's unused, but this keeps the code compiling and the dialog
+        // working.
     }
 
     private void initializeDialog() {
