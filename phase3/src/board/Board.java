@@ -76,6 +76,31 @@ public class Board {
     }
 
     /**
+     * Sets the piece at the specified position on the board.
+     * Used by undo logic to restore pieces to their previous squares.
+     *
+     * @param position the position to set
+     * @param piece    the piece to place there (or null to clear)
+     */
+    public void setPiece(Position position, Piece piece) {
+        if (!isValidPosition(position)) {
+            return;
+        }
+        int row = position.getRow();
+        int col = position.getCol();
+
+        squares[row][col] = piece;
+
+        if (piece != null) {
+            // Keep the piece's internal position in sync with the board
+            piece.setPosition(position);
+
+            // If this piece was previously captured, remove it from the captured list
+            capturedPieces.remove(piece);
+        }
+    }
+
+    /**
      * Attempts to move a piece from one position to another.
      * Validates the move and handles captures, castling, and pawn promotion.
      * Prevents moves that would leave the king in check.

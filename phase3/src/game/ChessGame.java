@@ -5,6 +5,8 @@ import pieces.Piece;
 import gui.ChessGUI;
 import utils.Position;
 import javax.swing.JOptionPane;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 /**
  * PHASE 3: Chess Game with FULL rules implementation
@@ -16,6 +18,32 @@ public class ChessGame {
     private String currentTurn;
     private boolean gameActive;
     private ChessGUI gui;
+
+    /**
+     * Stores the information needed to undo a single move.
+     */
+    private static class MoveRecord {
+        private final Position from;
+        private final Position to;
+        private final Piece movedPiece;
+        private final Piece capturedPiece;
+        private final String turnBeforeMove;
+
+        public MoveRecord(Position from, Position to,
+                Piece movedPiece, Piece capturedPiece,
+                String turnBeforeMove) {
+            this.from = from;
+            this.to = to;
+            this.movedPiece = movedPiece;
+            this.capturedPiece = capturedPiece;
+            this.turnBeforeMove = turnBeforeMove;
+        }
+    }
+
+    /**
+     * Stack of moves to support undo functionality.
+     */
+    private final Deque<MoveRecord> moveHistory = new ArrayDeque<>();
 
     public ChessGame() {
         this.board = new Board();
@@ -54,10 +82,16 @@ public class ChessGame {
             return false;
         }
 
+        // Capture any piece currently on the destination square (before moving)
+        Piece capturedPiece = board.getPiece(to);
+
         // Attempt the move with full validation
         boolean moveSuccessful = board.movePiece(from, to);
 
         if (moveSuccessful) {
+            // Record this move so it can be undone later
+            moveHistory.push(new MoveRecord(from, to, piece, capturedPiece, currentTurn));
+
             // Switch turns
             currentTurn = currentTurn.equals("white") ? "black" : "white";
 
@@ -87,6 +121,7 @@ public class ChessGame {
         this.board = new Board();
         this.currentTurn = "white";
         this.gameActive = true;
+        this.moveHistory.clear();
     }
 
     public String getCurrentTurn() {
@@ -134,7 +169,37 @@ public class ChessGame {
         this.gameActive = false;
     }
 
-    public void undoMove() {
-        // TODO: implement actual undo logic later
+    /**
+     * PHASE 3: Undo the last move, if possible.
+     *
+     * @return true if a move was undone, false if there was no move to undo
+     */
+    public boolean undoMove() {
+        if (moveHistory.isEmpty()) {
+            return false;
+        }
+
+        MoveRecord last = moveHistory.pop();
+
+        // Restore the moved piece back to its original position
+        board.setPiece(last.from, last.movedPiece);
+
+        // Restore the captured piece (if any) to the destination square,
+        // otherwise clear that square.
+        board.setPiece(last.to, last.capturedPiece);
+
+        // Restore whose turn it was before the move
+        this.currentTurn = last.turnBeforeMove;
+
+        // Make sure the game is active again
+        this.gameActive = true;
+
+        // Update the GUI if it is attached
+        if (gui != null) {
+            gui.updateBoardDisplay();
+            gui.updateTurnDisplay();
+        }
+
+        return true;
     }
 }
