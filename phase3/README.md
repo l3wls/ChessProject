@@ -71,7 +71,7 @@ phase3/
 ├── bin/
 │   └── (compiled .class files)
 ├── images/
-│   └── (screenshots and diagrams)
+│   └── (screenshots and class diagrams txt)
 └── README.md
 
 Features Checklist

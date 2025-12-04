@@ -1,0 +1,422 @@
+1. Main
+Package: (default/root)
+Attributes:
+
+(none - just entry point)
+
+Methods:
+
++ main(String[] args): void
+
+Relationships:
+
+Creates → ChessGUI
+
+
+2. ChessGame
+Package: game
+Attributes:
+
+- board: Board
+- currentTurn: String
+- gameActive: boolean
+- gui: ChessGUI
+- moveHistory: Deque<MoveRecord>
+
+Methods:
+
++ ChessGame()
++ setGui(ChessGUI): void
++ makeMove(Position, Position): boolean
++ newGame(): void
++ getCurrentTurn(): String
++ getBoard(): Board
++ isCheckmate(): boolean
++ isStalemate(): boolean
++ isInCheck(): boolean
++ isKingCaptured(): boolean
++ getWinner(): String
++ isGameActive(): boolean
++ endGame(): void
++ undoMove(): boolean
+- createPiece(String, String, Position): Piece
+
+Inner Class:
+
+MoveRecord (stores move history for undo)
+
+Relationships:
+
+Has-a → Board (composition)
+Has-a → ChessGUI (association)
+Uses → Position
+Uses → Piece
+
+
+3. Board
+Package: board
+Attributes:
+
+- squares: Piece[][]
+- capturedPieces: List<Piece>
+- whiteKingMoved: boolean
+- blackKingMoved: boolean
+- whiteRookKingSideMoved: boolean
+- whiteRookQueenSideMoved: boolean
+- blackRookKingSideMoved: boolean
+- blackRookQueenSideMoved: boolean
+
+Methods:
+
++ Board()
+- initializeBoard(): void
++ getPiece(Position): Piece
++ setPiece(Position, Piece): void
++ movePiece(Position, Position): boolean
+- handleCastling(King, Position, Position): boolean
+- trackPieceMovement(Piece, Position): void
+- promotePawn(Position, String): void
+- wouldLeaveKingInCheck(Piece, Position): boolean
++ isCheck(String): boolean
+- findKing(String): Position
++ isCheckmate(String): boolean
++ isStalemate(String): boolean
++ isKingCaptured(): boolean
++ getWinner(): String
+- isValidPosition(Position): boolean
++ display(): void
++ getSquares(): Piece[][]
++ getCapturedPieces(): List<Piece>
+
+Relationships:
+
+Contains → Piece[][] (composition)
+Uses → Position
+Uses → King, Queen, Rook, Bishop, Knight, Pawn
+
+
+4. Piece (Abstract)
+Package: pieces
+Attributes:
+
+# color: String
+# position: Position
+# symbol: String
+
+Methods:
+
++ Piece(String, Position)
++ getColor(): String
++ getPosition(): Position
++ setPosition(Position): void
++ getSymbol(): String
++ {abstract} possibleMoves(Piece[][]): List<Position>
++ isValidMove(Piece[][], Position): boolean
++ move(Position): void
++ toString(): String
+
+Relationships:
+
+Uses → Position
+Parent of → King, Queen, Rook, Bishop, Knight, Pawn
+
+
+5. King
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ King(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
+
+Relationships:
+
+Extends → Piece
+
+
+6. Queen
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ Queen(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
+# addRay(List<Position>, Piece[][], int, int): void
+
+Relationships:
+
+Extends → Piece
+
+
+7. Rook
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ Rook(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
+# addRay(List<Position>, Piece[][], int, int): void
+
+Relationships:
+
+Extends → Piece
+
+
+8. Bishop
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ Bishop(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
+# addRay(List<Position>, Piece[][], int, int): void
+
+Relationships:
+
+Extends → Piece
+
+
+9. Knight
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ Knight(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
+
+Relationships:
+
+Extends → Piece
+
+
+10. Pawn
+Package: pieces
+Inherits from: Piece
+Attributes:
+
+(inherits all from Piece)
+
+Methods:
+
++ Pawn(String, Position)
++ possibleMoves(Piece[][]): List<Position> (override)
++ isValidMove(Piece[][], Position): boolean (override)
++ isPromotionSquare(Position): boolean
+
+Relationships:
+
+Extends → Piece
+
+
+11. Position
+Package: utils
+Attributes:
+
+- row: int
+- col: int
+
+Methods:
+
++ Position(int, int)
++ getRow(): int
++ getCol(): int
++ equals(Object): boolean (override)
++ hashCode(): int (override)
++ toString(): String (override)
+
+Relationships:
+
+Used by → Piece, Board, ChessGame
+
+
+12. ChessGUI
+Package: gui
+Inherits from: JFrame
+Attributes:
+
+- chessGame: ChessGame
+- boardPanel: BoardPanel
+- historyPanel: GameHistoryPanel
+- menuBar: JMenuBar
+- turnLabel: JLabel
+- lightSquareColor: Color
+- darkSquareColor: Color
+
+Methods:
+
++ ChessGUI()
+- initializeGame(): void
+- initializeGUI(): void
+- initializeMenu(): void
+- newGame(): void
+- showSettings(): void
++ showGameOver(String): void
++ updateBoardDisplay(): void
++ updateTurnDisplay(): void
++ addMoveToHistory(String): void
++ addCapturedPiece(String): void
++ getLightSquareColor(): Color
++ getDarkSquareColor(): Color
++ setBoardColors(Color, Color): void
++ getChessGame(): ChessGame
+
+Relationships:
+
+Has-a → ChessGame (composition)
+Has-a → BoardPanel (composition)
+Has-a → GameHistoryPanel (composition)
+Creates → SettingsDialog
+
+
+13. BoardPanel
+Package: gui
+Inherits from: JPanel
+Attributes:
+
+- chessGame: ChessGame
+- gui: ChessGUI
+- selectedPosition: Position
+- SQUARE_SIZE: int
+
+Methods:
+
++ BoardPanel(ChessGame, ChessGUI)
++ updateBoard(): void
++ updateBoardColors(): void
+- handleSquareClick(Position): void
+# paintComponent(Graphics): void (override)
+
+Relationships:
+
+Uses → ChessGame
+Uses → ChessGUI
+Uses → Position
+
+
+14. GameHistoryPanel
+Package: gui
+Inherits from: JPanel
+Attributes:
+
+- chessGame: ChessGame
+- gui: ChessGUI
+- moveListArea: JTextArea
+- capturedPiecesArea: JTextArea
+
+Methods:
+
++ GameHistoryPanel(ChessGame, ChessGUI)
++ addMove(String): void
++ addCapturedPiece(String): void
++ clearHistory(): void
+
+Relationships:
+
+Uses → ChessGame
+Uses → ChessGUI
+
+
+15. SettingsDialog
+Package: gui
+Inherits from: JDialog
+Attributes:
+
+- gui: ChessGUI
+- chessGame: ChessGame
+- lightColorButton: JButton
+- darkColorButton: JButton
+- sizeComboBox: JComboBox<String>
+
+Methods:
+
++ SettingsDialog(ChessGUI, ChessGame)
+- createColorPanel(): JPanel
+- createSizePanel(): JPanel
+- chooseLightColor(): void
+- chooseDarkColor(): void
+- applySettings(): void
+
+Relationships:
+
+Uses → ChessGUI
+Uses → ChessGame
+
+Inheritance (IS-A):
+Piece (abstract)
+    ├── King
+    ├── Queen
+    ├── Rook
+    ├── Bishop
+    ├── Knight
+    └── Pawn
+
+JFrame
+    └── ChessGUI
+
+JPanel
+    ├── BoardPanel
+    └── GameHistoryPanel
+
+JDialog
+    └── SettingsDialog
+
+ChessGame
+    └── Board (owns)
+
+Board
+    └── Piece[][] (owns)
+
+Composition (HAS-A - Strong):
+ChessGUI
+    ├── ChessGame (owns)
+    ├── BoardPanel (owns)
+    └── GameHistoryPanel (owns)
+
+Association (USES - Weak):
+Main → ChessGUI (creates)
+
+ChessGame → Position (uses)
+ChessGame → Piece (uses)
+
+Board → Position (uses)
+Board → Piece (uses)
+Board → King, Queen, Rook, etc. (uses)
+
+Piece → Position (has)
+
+ChessGUI → SettingsDialog (creates)
+
+BoardPanel → ChessGame (uses)
+BoardPanel → ChessGUI (uses)
+BoardPanel → Position (uses)
+
+GameHistoryPanel → ChessGame (uses)
+GameHistoryPanel → ChessGUI (uses)
+
+SettingsDialog → ChessGame (uses)
+SettingsDialog → ChessGUI (uses)
